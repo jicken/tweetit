@@ -1,18 +1,17 @@
 package de.adorsys.tweetit.server.model;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Collection;
+import java.util.HashSet;
 
 @XmlRootElement
 @Entity
-public class User implements java.io.Serializable {
+public class MyUser implements java.io.Serializable {
 
 
 	@Override
@@ -31,7 +30,7 @@ public class User implements java.io.Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		MyUser other = (MyUser) obj;
 		if (userId == null) {
 			if (other.userId != null)
 				return false;
@@ -53,14 +52,14 @@ public class User implements java.io.Serializable {
 	}
 
 	@ManyToMany(fetch=FetchType.EAGER)
-	private Collection<User> followUsers = new HashSet<User>();
+	private Collection<MyUser> followMyUsers = new HashSet<MyUser>();
 
-	public Collection<User> getFollowUsers() {
-		return followUsers;
+	public Collection<MyUser> getFollowMyUsers() {
+		return followMyUsers;
 	}
 
-	public void setFollowUsers(Collection<User> followUser) {
-		this.followUsers = followUser;
+	public void setFollowMyUsers(Collection<MyUser> followMyUser) {
+		this.followMyUsers = followMyUser;
 	}
 
 	@Column

@@ -1,15 +1,11 @@
 package de.adorsys.tweetit.server.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -55,13 +51,13 @@ public class Tweet implements java.io.Serializable {
 	}
 
 	@ManyToOne
-	private User emitter;
+	private MyUser emitter;
 
-	public User getEmitter() {
+	public MyUser getEmitter() {
 		return this.emitter;
 	}
 
-	public void setEmitter(final User emitter) {
+	public void setEmitter(final MyUser emitter) {
 		this.emitter = emitter;
 	}
 
@@ -76,14 +72,14 @@ public class Tweet implements java.io.Serializable {
 		this.message = message;
 	}
 
-	private @Temporal(TemporalType.DATE)
-	Date cdat;
+	private
+    String cdat;
 
-	public Date getCdat() {
+	public String getCdat() {
 		return this.cdat;
 	}
 
-	public void setCdat(final Date cdat) {
+	public void setCdat(final String cdat) {
 		this.cdat = cdat;
 	}
 

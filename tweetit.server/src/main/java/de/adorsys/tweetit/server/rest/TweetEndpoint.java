@@ -1,47 +1,54 @@
 package de.adorsys.tweetit.server.rest;
 
-import java.util.List;
+import de.adorsys.tweetit.server.model.MyUser;
+import de.adorsys.tweetit.server.model.Tweet;
+import de.adorsys.tweetit.server.model.TweetDTO;
 
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.ws.rs.*;
-import de.adorsys.tweetit.server.model.Tweet;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import java.util.Date;
+import java.util.List;
 
 @Stateless
 @Path("/tweets")
-public class TweetEndpoint
-{
-   @PersistenceContext
-   private EntityManager em;
+public class TweetEndpoint {
+    @PersistenceContext
+    private EntityManager em;
 
-   @POST
-   @Consumes("application/json")
-   public Tweet create(Tweet entity)
-   {
-      em.joinTransaction();
-      em.persist(entity);
-      return entity;
-   }
+    @POST
+    @Consumes("application/json")
+    public TweetDTO create(TweetDTO tweet) {
 
-   @GET
-   @Path("/{id}")
-   @Produces("application/json")
-   public Tweet findById(@PathParam("id") Long id)
-   {
-      return em.find(Tweet.class, id);
-   }
+        MyUser myUser = em.find(MyUser.class, tweet.getUserId());
+        Tweet tweetEntity = new Tweet();
+        tweetEntity.setCdat(String.valueOf(new Date().getTime()));
+        tweetEntity.setEmitter(myUser);
+        tweetEntity.setMessage(tweetEntity.getMessage());
+        em.persist(tweetEntity);
+        tweet.setCdate(tweetEntity.getCdat());
+        return tweet;
+    }
 
-   @GET
-   @Produces("application/json")
-   public List<Tweet> listAll()
-   {
-      @SuppressWarnings("unchecked")
-      final List<Tweet> results = em.createQuery("SELECT x FROM Tweet x").getResultList();
-      return results;
-   }
-  
+    @GET
+    @Path("/{id}")
+    @Produces("application/json")
+    public Tweet findById(@PathParam("id") Long id) {
+        return em.find(Tweet.class, id);
+    }
+
+    @GET
+    @Produces("application/json")
+    public List<Tweet> listAll() {
+        @SuppressWarnings("unchecked")
+        final List<Tweet> results = em.createQuery("SELECT x FROM Tweet x").getResultList();
+        return results;
+    }
+
 }

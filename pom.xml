@@ -3,10 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jboss.forge.generated</groupId>
-  <artifactId>generated-pom</artifactId>
+  <artifactId>tweetit</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>tweetit.server</module>
+    <module>tweetitgui</module>
   </modules>
 </project>

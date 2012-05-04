@@ -1,7 +1,7 @@
 package de.adorsys.tweetit.server.rest;
 
-import java.util.Collection;
-import java.util.List;
+import de.adorsys.tweetit.server.model.MyUser;
+import de.adorsys.tweetit.server.model.Tweet;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,9 +14,8 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-
-import de.adorsys.tweetit.server.model.Tweet;
-import de.adorsys.tweetit.server.model.User;
+import java.util.Collection;
+import java.util.List;
 
 @Stateless
 @Path("/users")
@@ -27,7 +26,7 @@ public class UserEndpoint
 
    @POST
    @Consumes("application/json")
-   public User create(User entity)
+   public MyUser create(MyUser entity)
    {
       
       em.persist(entity);
@@ -37,10 +36,10 @@ public class UserEndpoint
    @DELETE
    @Path("/{id}")
    @Produces("application/json")
-   public User deleteById(@PathParam("id") String id)
+   public MyUser deleteById(@PathParam("id") String id)
    {
       
-      User result = em.find(User.class, id);
+      MyUser result = em.find(MyUser.class, id);
       em.remove(result);
       return result;
    }
@@ -48,24 +47,24 @@ public class UserEndpoint
    @GET
    @Path("/{id}")
    @Produces("application/json")
-   public User findById(@PathParam("id") String id)
+   public MyUser findById(@PathParam("id") String id)
    {
-      return em.find(User.class, id);
+      return em.find(MyUser.class, id);
    }
 
    @GET
    @Produces("application/json")
-   public List<User> listAll()
+   public List<MyUser> listAll()
    {
       @SuppressWarnings("unchecked")
-      final List<User> results = em.createQuery("SELECT x FROM User x").getResultList();
+      final List<MyUser> results = em.createQuery("SELECT x FROM MyUser x").getResultList();
       return results;
    }
 
    @PUT
    @Path("/{id}")
    @Consumes("application/json")
-   public User update(@PathParam("id") String id, User entity)
+   public MyUser update(@PathParam("id") String id, MyUser entity)
    {
       entity.setUserId(id);
       entity = em.merge(entity);
@@ -75,17 +74,17 @@ public class UserEndpoint
    @Path("/{userId}/followers/{followerId}")
    @PUT
    public void addFollow(@PathParam("userId") String userId, @PathParam("followerId") String followerId){
-	   User self = em.find(User.class, userId);
-	   User newFollower = em.find(User.class, followerId);
-	   Collection<User> followUsers = self.getFollowUsers();
-	   followUsers.add(newFollower);
+	   MyUser self = em.find(MyUser.class, userId);
+	   MyUser newFollower = em.find(MyUser.class, followerId);
+	   Collection<MyUser> followMyUsers = self.getFollowMyUsers();
+	   followMyUsers.add(newFollower);
    }
    
    @GET
    @Path("/{userId}/tweets")
    @Produces("application/json")
    public Collection<Tweet> listFollowingTweets(@PathParam("userId") String userId) {
-	   final List<Tweet> results = em.createQuery("SELECT t FROM Tweet t INNER JOIN t.emitter other WHERE other.userId IN (SELECT self.userId FROM User self WHERE self.userId = ?)")
+	   final List<Tweet> results = em.createQuery("SELECT t FROM Tweet t INNER JOIN t.emitter other WHERE other.userId IN (SELECT self.userId FROM MyUser self WHERE self.userId = ?)")
 			   .setParameter(1, userId)
 			   .getResultList();
 	   return results;
